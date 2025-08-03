@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
+import { RoutePaths } from '../../shared/utils/routes';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [],
+  imports: [RouterOutlet, CommonModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
@@ -24,6 +26,29 @@ export class Dashboard implements OnInit {
         this.router.navigate(['/login']);
 
       }
+
+    }
+
+    menu(id: number) {
+
+      switch (id) {
+
+         case 1: 
+         this.router.navigate(['/home/'+ RoutePaths.COURSES ])
+         break;
+
+         case 2: 
+         this.router.navigate(['/home/'+ RoutePaths.STUDENTS ])
+         break;
+
+         case 3: 
+         this.router.navigate(['/'+ RoutePaths.LOGIN ])
+         break;
+
+
+      }
+
+
 
     }
 
