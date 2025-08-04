@@ -9,3 +9,10 @@ export interface Student {
   email: string;
   title: string
 }
+
+export interface Course {
+  id: number;
+  title: string;
+  description: string;
+  tstudent: number;
+}

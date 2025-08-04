@@ -22,11 +22,12 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: RoutePaths.MAIN, // o cualquier hijo por defecto
+        redirectTo: RoutePaths.MAIN, 
         pathMatch: 'full'
       }
     ] },
 
-     {path: '', redirectTo: RoutePaths.LOGIN, pathMatch:'full'}
+     {path: '', redirectTo: RoutePaths.LOGIN, pathMatch:'full'},
+     {path: '**', redirectTo: RoutePaths.LOGIN, pathMatch:'full'}
 
 ];
