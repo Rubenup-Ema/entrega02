@@ -39,14 +39,10 @@ export class CoursesTable {
 
   onEdit(Course: Course){
 
-    console.log(Course);
-
+  
     let editCourse!: Course;
 
     editCourse = Course ;
-
-    
-    console.log(editCourse);
 
     this.CourseEdit.emit(editCourse);
 

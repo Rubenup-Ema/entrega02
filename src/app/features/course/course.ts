@@ -5,17 +5,22 @@ import { MatDialog } from '@angular/material/dialog';
 import { Message } from '../../shared/services/message';
 import { ConfirmDialog } from '../../shared/utils/confirm-dialog/confirm-dialog';
 import { Course } from '../../shared/entities/entity';
+import { CommonModule } from '@angular/common';
+import { AddCourse } from "./add-course/add-course";
+import { EditCourse } from './edit-course/edit-course';
 
 
 @Component({
   selector: 'app-course',
-  imports: [CoursesTable],
+  imports: [CoursesTable, CommonModule, AddCourse, EditCourse],
   templateUrl: './course.html',
   styleUrl: './course.scss'
 })
 export class Courses implements OnInit{
 
+  editCourse!: Course;
   courses: Course[] = [];
+  formVisible: boolean[] = [false,false,false]; // [list, add, edit]
 
   constructor(private _servicios: CoursesService, private dialog: MatDialog, private snackBar:Message) {
 
@@ -26,6 +31,7 @@ export class Courses implements OnInit{
   ngOnInit(): void {
     
      this.loadCourses();
+     this.formVisible[0] = true;
 
   }
 
@@ -38,13 +44,96 @@ export class Courses implements OnInit{
             if (data.ok.toString() === "true") {
 
               this.courses = data.result;
-
+               this.noChangeNewCourse(true);
             }
 
         }
 
       
     ) 
+
+  }
+
+  newCourse() {
+
+    this.formVisible = [false,true,false];
+
+  }
+
+  noChangeNewCourse(value: boolean) {
+
+    this.formVisible = [value,false,false];
+
+
+  }
+
+  addCourse(course: Course) {
+
+    this._servicios.addCourse(course).subscribe({
+
+      next:(data:any) => {
+
+        if (data.ok.toString() === "true") {
+          this.snackBar.show(data.msg);
+          this.loadCourses();
+         
+        } 
+
+      },
+      error: (err) =>{
+
+         this.snackBar.show(err.message);
+
+      }
+      }
+    )
+
+
+  }
+
+  editedCourse(courseEdit: Course) {
+
+    this._servicios.editCourse(courseEdit).subscribe({
+
+      next:(data:any) => {
+
+        if (data.ok.toString() === "true") {
+          this.snackBar.show(data.msg);
+          const index = this.courses.findIndex(course => course.id === courseEdit.id);
+
+  
+          if (index !== -1) {
+
+          this.courses[index] = {...courseEdit};
+          this.courses = [...this.courses];
+          
+          } 
+          this.noChangeEditCourse(true);
+      }
+      },
+      error: (err) =>{
+
+         this.snackBar.show(err.message);
+
+      }
+      }
+    )
+
+
+  }
+
+  onEdit(courseEdit: Course) {
+
+    
+    this.editCourse = courseEdit;   
+    this.formVisible = [false,false,true]
+
+  }
+
+  noChangeEditCourse(value: boolean) {
+
+    this.formVisible = [value,false,false];
+
 
   }
 
