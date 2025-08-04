@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
-import { Course } from '../course';
-import { CoursesService } from '../courses-service/courses.service';
+import { Course } from '../../../shared/entities/entity';
+
 
 
 @Component({
@@ -13,42 +13,24 @@ import { CoursesService } from '../courses-service/courses.service';
 })
 export class CoursesTable {
 
-  @Input() Courses: Course[] = [];
+  @Input() courses: Course[] = [];
   @Output() CourseEdit= new EventEmitter<Course>();
   @Output() CourseDelete= new EventEmitter<Course>();
 
   displayedColumns: string[] = ['id', 'title', 'description', 'tstudent' ,'acciones']
 
-  constructor(private _servicios: CoursesService) {
+  constructor() {
 
 
   }
 
   ngOnInit(): void {
     
-    this.loadCourses();
+   
 
   }
 
-  loadCourses() {
-
-    this._servicios.loadCourses().subscribe(
-      
-        (data:any) => {
-
-            if (data.ok.toString() === "true") {
-
-              this.Courses = data.result;
-
-            }
-
-        }
-
-      
-    ) 
-
-  }
-
+ 
   onDelete(Course: Course){
 
     this.CourseDelete.emit(Course);
@@ -61,7 +43,7 @@ export class CoursesTable {
 
     let editCourse!: Course;
 
-    editCourse = {...Course} ;
+    editCourse = Course ;
 
     
     console.log(editCourse);

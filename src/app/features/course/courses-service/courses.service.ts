@@ -29,4 +29,19 @@ export class CoursesService {
 
     }
 
+      deleteCourse(id:number) {
+
+      return this.http.delete(`${this.url}/course?id=${id}`).pipe (
+
+        map( data=>{
+
+          return data;
+
+        }
+
+        )
+      )
+
+    }
+
 }

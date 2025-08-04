@@ -4,7 +4,7 @@ import {MatTableModule} from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { FullnamePipe } from '../../../shared/pipe/fullname-pipe';
 import { Student } from '../../../shared/entities/entity';
-import { ServiceStudents } from '../students-service/service.students';
+
 
 
 @Component({
@@ -16,40 +16,36 @@ import { ServiceStudents } from '../students-service/service.students';
 export class StudentsTable implements OnInit {
 
   @Input() students: Student[] = [];
+  // students: Student[] = [];
+
+  // @Input() set studentList(value: Student[]) {
+
+  
+   
+  //     this.students = value;
+  //     this.students = { ...value };
+
+     
+  
+  // }
+
   @Output() studentEdit= new EventEmitter<Student>();
   @Output() studentDelete= new EventEmitter<Student>();
 
   displayedColumns: string[] = ['name', 'surname', 'fullname', 'age', 'dni', 'average', 'title' , 'acciones']
 
-  constructor(private _servicios: ServiceStudents) {
+  constructor() {
 
 
   }
 
   ngOnInit(): void {
     
-    this.loadStudents();
+    this.students = [];
 
   }
 
-  loadStudents() {
-
-    this._servicios.loadStudents().subscribe(
-      
-        (data:any) => {
-
-            if (data.ok.toString() === "true") {
-
-              this.students = data.result;
-
-            }
-
-        }
-
-      
-    ) 
-
-  }
+ 
 
   onDelete(student: Student){
 

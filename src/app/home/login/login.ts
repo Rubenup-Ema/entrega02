@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ServicesLogin } from '../../shared/services/services.login';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Message } from '../../shared/services/message';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +15,8 @@ export class Login implements OnInit {
 
     form!: FormGroup;
     procesando = false;
-    constructor(private router:Router, private fb: FormBuilder, private _services: ServicesLogin, private snackBar: MatSnackBar) {
+    constructor(private router:Router, private fb: FormBuilder, private _services: ServicesLogin, 
+      private snackBar: Message) {
 
          this.form =  this.fb.group({
 
@@ -48,7 +49,7 @@ export class Login implements OnInit {
 
           } else {
             this.procesando = false;
-            this.messageBox(data.msg);
+            this.snackBar.show(data.msg);
 
           }
 
@@ -60,15 +61,5 @@ export class Login implements OnInit {
     }
 
 
-    messageBox(texto: string) {
-
-    this.snackBar.open(texto + ' ✅', 'Cerrar', {
-    duration: 3000, // ms
-    verticalPosition: 'top',  // 'top' | 'bottom'
-    horizontalPosition: 'right' // 'start' | 'center' | 'end' | 'left' | 'right'
-    
-    });
-
-  }
 
 }

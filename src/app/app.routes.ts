@@ -10,7 +10,7 @@ export const routes: Routes = [
     children: [
       {
         path: RoutePaths.COURSES,
-        loadComponent: () => import('./features/course/course').then(m => m.Course)
+        loadComponent: () => import('./features/course/course').then(m => m.Courses)
       },
       {
         path: RoutePaths.STUDENTS,

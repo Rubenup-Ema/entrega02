@@ -20,7 +20,7 @@
 
              <div class="w-100">
                  
-                <app-courses-table></app-courses-table>
+                <app-courses-table [courses]="courses" (CourseDelete)="onDelete($event)"></app-courses-table>
 
              </div>
 
