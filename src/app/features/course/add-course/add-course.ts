@@ -35,7 +35,7 @@ export class AddCourse implements OnInit {
 
   onSubmit() {
 
-    console.log('Form summited');
+
     this.courseAdded.emit(this.courseForm.value);
 
 

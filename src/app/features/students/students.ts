@@ -1,24 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { StudentsTable } from "./students-table/students-table";
 import { ServiceStudents } from './students-service/service.students';
-import { Student } from '../../shared/entities/entity';
+import { Course, Student } from '../../shared/entities/entity';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialog } from '../../shared/utils/confirm-dialog/confirm-dialog';
 import { Message } from '../../shared/services/message';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AddStudent } from "./add-student/add-student";
+import { CoursesService } from '../course/courses-service/courses.service';
+import { EditStudent } from './edit-student/edit-student';
 
 @Component({
   selector: 'app-students',
-  imports: [StudentsTable, FormsModule, CommonModule],
+  imports: [StudentsTable, FormsModule, CommonModule, AddStudent,EditStudent],
   templateUrl: './students.html',
   styleUrl: './students.scss'
 })
 export class Students implements OnInit {
 
+  courses: Course[] = [];
   students: Student[] = [];
-
-  constructor(private _servicios:ServiceStudents, private dialog: MatDialog, private snackBar:Message) {
+  editStudent!: Student;
+  formVisible: boolean[] = [true,false,false]; // [list, add, edit]
+  constructor(private _servicios:ServiceStudents, private _serviciosC: CoursesService, private dialog: MatDialog, private snackBar:Message) {
 
 
 
@@ -26,6 +31,8 @@ export class Students implements OnInit {
 
    ngOnInit() {
      this.loadStudents();
+     this.loadCourses();
+     this.formVisible[0] = true;
   }
 
    loadStudents() {
@@ -37,7 +44,7 @@ export class Students implements OnInit {
 
               this.students = data.result;
               this.students = [...this.students];
-              
+             this.noChangeNewSudent(true);
 
             }
 
@@ -60,6 +67,110 @@ export class Students implements OnInit {
 
   }
 
+   loadCourses() {
+
+    this._serviciosC.loadCourses().subscribe(
+      
+        (data:any) => {
+
+            if (data.ok.toString() === "true") {
+
+              this.courses = data.result;
+              
+            }
+
+        }
+
+      
+    ) 
+
+  }
+
+  newStudent() {
+
+    this.formVisible = [false,true,false];
+
+  }
+
+  noChangeNewSudent(value: boolean) {
+
+
+    this.formVisible = [value,false,false];
+
+
+  }
+
+ 
+
+   addStudent(student: Student) {
+
+
+    this._servicios.addStudent(student).subscribe({
+
+      next:(data:any) => {
+
+        if (data.ok.toString() === "true") {
+          this.snackBar.show(data.msg);
+         
+         
+        } 
+
+      },
+      error: (err) =>{
+
+         this.snackBar.show(err.message);
+
+      },
+      complete: ()=>{
+        this.loadStudents();
+      }
+      }
+    )
+
+
+  }
+
+  editedStudent(studentEdit: Student) {
+
+    this._servicios.editStudent(studentEdit).subscribe({
+
+      next:(data:any) => {
+
+        if (data.ok.toString() === "true") {
+          this.snackBar.show(data.msg);
+          const index = this.students.findIndex(student => student.id === studentEdit.id);
+
+  
+          if (index !== -1) {
+         
+          var course = this.courses.find(course => course.id == studentEdit.courseId);
+          studentEdit.title = "" + course?.title;
+          this.students[index] = {...studentEdit};
+          this.students = [...this.students];
+          
+          } 
+          this.noChangeNewSudent(true);
+      }
+      },
+      error: (err) =>{
+
+         this.snackBar.show(err.message);
+
+      }
+      }
+    )
+
+
+  }
+
+  onEdit(studentEdit: Student) {
+
+    
+    this.editStudent = studentEdit;   
+    this.formVisible = [false,false,true]
+
+  }
+
  onDelete(studentDelete: Student) {
 
     const dialogRef = this.dialog.open(ConfirmDialog, {
@@ -77,7 +188,6 @@ export class Students implements OnInit {
 
               this.students = this.students.filter(student => student.id !== studentDelete.id);
               
-              console.log(this.students);
               this.snackBar.show(data.msg);
 
             } else {

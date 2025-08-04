@@ -69,7 +69,7 @@ loadCourseData(): void {
 
   onSubmit() {
 
-    console.log('Form summited');
+  
     this.courseEdited.emit(this.courseForm.value);
 
 

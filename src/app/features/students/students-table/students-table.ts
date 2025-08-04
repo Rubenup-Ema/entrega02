@@ -16,18 +16,7 @@ import { Student } from '../../../shared/entities/entity';
 export class StudentsTable implements OnInit {
 
   @Input() students: Student[] = [];
-  // students: Student[] = [];
-
-  // @Input() set studentList(value: Student[]) {
-
-  
-   
-  //     this.students = value;
-  //     this.students = { ...value };
-
-     
-  
-  // }
+ 
 
   @Output() studentEdit= new EventEmitter<Student>();
   @Output() studentDelete= new EventEmitter<Student>();
@@ -41,7 +30,6 @@ export class StudentsTable implements OnInit {
 
   ngOnInit(): void {
     
-    this.students = [];
 
   }
 
@@ -55,14 +43,9 @@ export class StudentsTable implements OnInit {
 
   onEdit(student: Student){
 
-    console.log(student);
-
     let editStudent!: Student;
 
     editStudent = { ...student };
-
-    
-    console.log(editStudent);
 
     this.studentEdit.emit(editStudent);
 

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { Students } from '../students';
+import { Student } from '../../../shared/entities/entity';
 
 @Injectable({
   providedIn: 'root'
@@ -28,11 +29,35 @@ export class ServiceStudents {
         )
       )
 
-     
-  
-
     }
 
+     addStudent(student: Student) {
+
+      return this.http.post(`${this.url}/student`,student).pipe (
+
+        map( data=>{
+
+          return data;
+
+        }
+
+        )
+      )
+    }
+
+    editStudent(student: Student) {
+
+      return this.http.put(`${this.url}/student`,student).pipe (
+
+        map( data=>{
+
+          return data;
+
+        }
+
+        )
+      )
+    }
      
      deleteStudent(id:number) {
 
